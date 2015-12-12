@@ -12,16 +12,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vivek.sampleapp.R;
-import com.vivek.sampleapp.Student;
+import com.vivek.sampleapp.modal.Patient;
+import com.vivek.sampleapp.modal.StaffInformation;
+import com.vivek.sampleapp.modal.Student;
 import com.vivek.sampleapp.networktask.FetchDataTask;
+import com.vivek.sampleapp.networktask.FetchStaff;
+import com.vivek.sampleapp.networktask.NetworkTask;
+import com.vivek.sampleapp.networktask.SendToServer;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 public class DrawerActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener ,Response.Listener<List<StaffInformation>>{
 
 //    @Override
 //    protected void onResume() {
@@ -49,12 +58,17 @@ public class DrawerActivity extends BaseActivity
 //        Log.d("vvk", "onpause Drawer activity ");
 //    }
 
+    TextView tv;
+    ObjectMapper objMapper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        objMapper = new ObjectMapper();
+        tv = (TextView) findViewById(R.id.textviewdrawer);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -75,12 +89,13 @@ public class DrawerActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
         findViewById(R.id.buttonDrawer).setOnClickListener(this);
 
-        new FetchDataTask(new Response.Listener<List<Student>>() {
-            @Override
-            public void onResponse(List<Student> response) {
+//        new FetchDataTask(new Response.Listener<List<Student>>() {
+//            @Override
+//            public void onResponse(List<Student> response) {
+//
+//            }
+//        });
 
-            }
-        });
 
 //        JsonObjectRequest jsObjRequest = new JsonObjectRequest
 //                (Request.Method.GET, new String(), null, new Response.Listener<JSONObject>() {
@@ -163,14 +178,43 @@ public class DrawerActivity extends BaseActivity
 
         switch(v.getId()) {
             case R.id.buttonDrawer:
+//                FetchStaff f = new FetchStaff(DrawerActivity.this);
+//                f.execute();
+//                f.print();
                 long t1 = System.currentTimeMillis();
-                for(int i=0;i<10;i++) {
-//                    new FetchDataTask(i + " "+ Math.ceil(Math.random() * 100)).execute();
+                for(int i=0;i<1000;i++) {
+                    NetworkTask task = new NetworkTask(new com.vivek.sampleapp.interfaces.Response.SuccessListener() {
+                        @Override
+                        public void onResponse(Object result) {
+                            String patientname = "";
+                            List<Object> patientList = (List<Object>) result;
+                            if(patientList != null && patientList.size() > 0 ) {
+                                Patient p = objMapper.convertValue(patientList.get(0),Patient.class);
+                                patientname = p.getFullName();
+                            }
+                            tv.setText("success" + patientname);
+                            Log.d("vvk","success " + patientname);
+                        }
+                    }, new com.vivek.sampleapp.interfaces.Response.ErrorListener() {
+                        @Override
+                        public void onError() {
+                            Log.d("vvk","error");
+                        }
+                    });
+                    Future<?> future = task.execute();
+                    futureList.add(future);
+//                    new SendToServer().execute();
+
                 }
                 long t2 = System.currentTimeMillis();
                 Log.d("vvk","time taken = " + (t2-t1));
                 break;
         }
+
+    }
+
+    @Override
+    public void onResponse(List<StaffInformation> response) {
 
     }
 }

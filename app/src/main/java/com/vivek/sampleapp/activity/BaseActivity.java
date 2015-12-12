@@ -4,17 +4,33 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
+
 public class BaseActivity extends AppCompatActivity {
 
     final static String TAG = "vvk";
+
+    List<Future<?>> futureList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        futureList = new ArrayList<>();
     }
 
     @Override
     protected void onDestroy()
-    {
+    {   int size = futureList.size();
+        Future<?> future;
+        for(int i =0;i<size;i++) {
+            future = futureList.get(i);
+            if(!future.isDone() && !future.isCancelled()) {
+                future.cancel(true);
+                Log.d("vvk","cancelled");
+            }
+        }
         Log.i(TAG, "onDestroy enter");
         super.onDestroy();
         Log.i(TAG, "onDestroy exit");
