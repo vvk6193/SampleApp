@@ -1,65 +1,48 @@
 package com.vivek.sampleapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vivek.sampleapp.R;
-import com.vivek.sampleapp.modal.Patient;
-import com.vivek.sampleapp.modal.StaffInformation;
-import com.vivek.sampleapp.modal.Student;
-import com.vivek.sampleapp.networktask.FetchDataTask;
-import com.vivek.sampleapp.networktask.FetchStaff;
-import com.vivek.sampleapp.networktask.NetworkTask;
-import com.vivek.sampleapp.networktask.SendToServer;
+import com.vivek.sampleapp.adapter.NewsAdapter;
+import com.vivek.sampleapp.application.MyApplication;
+import com.vivek.sampleapp.interfaces.ClickListener;
+import com.vivek.sampleapp.modal.News;
+import com.vivek.sampleapp.modal.NewsItem;
+import com.vivek.sampleapp.networktask.FetchNewsTask;
+import com.vivek.sampleapp.sharedpreference.MySharedPreferenceManager;
+import com.vivek.sampleapp.sharedpreference.MySharedPreferenceObject;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 
 public class DrawerActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener ,Response.Listener<List<StaffInformation>>{
-
-//    @Override
-//    protected void onResume() {
-//        Log.d("vvk","onresume Drawer activity");
-//        super.onResume();
-//    }
-//
-//    @Override
-//    protected void onDestroy() {
-//        Log.d("vvk","ondestroy Drawer activity");
-//        super.onDestroy();
-//
-//    }
-//
-//    @Override
-//    protected void onStop() {
-//        Log.d("vvk", "onstop Drawer activity ");
-//        super.onStop();
-//
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        Log.d("vvk", "onpause Drawer activity ");
-//    }
+        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener,
+SwipeRefreshLayout.OnRefreshListener,ClickListener{
 
     TextView tv;
     ObjectMapper objMapper;
+    RecyclerView newsRecyclerView;
+    SwipeRefreshLayout swipeLayout;
+    static List<NewsItem> newsList;
+    NewsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +52,16 @@ public class DrawerActivity extends BaseActivity
         setSupportActionBar(toolbar);
         objMapper = new ObjectMapper();
         tv = (TextView) findViewById(R.id.textviewdrawer);
+        newsRecyclerView = (RecyclerView) findViewById(R.id.news_recycler_view);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        newsRecyclerView.setLayoutManager(layoutManager);
+        newsList = new ArrayList<>();
+        adapter = new NewsAdapter(getApplicationContext(),newsList,(ClickListener)this);
+        newsRecyclerView.setAdapter(adapter);
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +81,25 @@ public class DrawerActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         findViewById(R.id.buttonDrawer).setOnClickListener(this);
+        loadNews();
+        MySharedPreferenceManager s = MySharedPreferenceManager.getInstance(getApplicationContext());
+        long t1 = System.currentTimeMillis();
+        s.putFirstName("vivek");
+        s.putWeight(23);
+        s.putSignIn(true);
+        s.putUserId("vvk");
+        Log.d("vvk", "" + s.getFirstName() + s.getUserId() + s.getSignIn() + s.getWeight());
+        long t2 = System.currentTimeMillis();
+        Log.d("vvk","time taken preference1 = " + (t2-t1));
+        MySharedPreferenceObject obj = MyApplication.getPreferenceObject();
+        t1 = System.currentTimeMillis();
+        obj.setSignIn(false);
+        obj.setUid("vvk2");
+        obj.setWeight(25);
+        obj.setFname("vekariya");
+        Log.d("vvk", "" + obj.getFname() + obj.getUid() + obj.getWeight() +obj.isSignIn());
+        t2 = System.currentTimeMillis();
+        Log.d("vvk","time taken preference2 = " + (t2-t1));
 
 //        new FetchDataTask(new Response.Listener<List<Student>>() {
 //            @Override
@@ -142,6 +154,8 @@ public class DrawerActivity extends BaseActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent i = new Intent(DrawerActivity.this,HomeActivity.class);
+            startActivity(i);
             return true;
         }
 
@@ -178,34 +192,37 @@ public class DrawerActivity extends BaseActivity
 
         switch(v.getId()) {
             case R.id.buttonDrawer:
+                long t1 = System.currentTimeMillis();
+                loadNews();
+
+
 //                FetchStaff f = new FetchStaff(DrawerActivity.this);
 //                f.execute();
 //                f.print();
-                long t1 = System.currentTimeMillis();
-                for(int i=0;i<1000;i++) {
-                    NetworkTask task = new NetworkTask(new com.vivek.sampleapp.interfaces.Response.SuccessListener() {
-                        @Override
-                        public void onResponse(Object result) {
-                            String patientname = "";
-                            List<Object> patientList = (List<Object>) result;
-                            if(patientList != null && patientList.size() > 0 ) {
-                                Patient p = objMapper.convertValue(patientList.get(0),Patient.class);
-                                patientname = p.getFullName();
-                            }
-                            tv.setText("success" + patientname);
-                            Log.d("vvk","success " + patientname);
-                        }
-                    }, new com.vivek.sampleapp.interfaces.Response.ErrorListener() {
-                        @Override
-                        public void onError() {
-                            Log.d("vvk","error");
-                        }
-                    });
-                    Future<?> future = task.execute();
-                    futureList.add(future);
-//                    new SendToServer().execute();
-
-                }
+//                for(int i=0;i<1000;i++) {
+//                    NetworkTask task = new NetworkTask(new com.vivek.sampleapp.interfaces.Response.SuccessListener() {
+//                        @Override
+//                        public void onResponse(Object result) {
+//                            String patientname = "";
+//                            List<Object> patientList = (List<Object>) result;
+//                            if(patientList != null && patientList.size() > 0 ) {
+//                                Patient p = objMapper.convertValue(patientList.get(0),Patient.class);
+//                                patientname = p.getFullName();
+//                            }
+//                            tv.setText("success" + patientname);
+//                            Log.d("vvk","success " + patientname);
+//                        }
+//                    }, new com.vivek.sampleapp.interfaces.Response.ErrorListener() {
+//                        @Override
+//                        public void onError() {
+//                            Log.d("vvk","error");
+//                        }
+//                    });
+//                    Future<?> future = task.execute();
+//                    futureList.add(future);
+////                    new SendToServer().execute();
+//
+//                }
                 long t2 = System.currentTimeMillis();
                 Log.d("vvk","time taken = " + (t2-t1));
                 break;
@@ -213,8 +230,41 @@ public class DrawerActivity extends BaseActivity
 
     }
 
-    @Override
-    public void onResponse(List<StaffInformation> response) {
+    public void loadNews() {
+        new FetchNewsTask(new com.vivek.sampleapp.interfaces.Response.SuccessListener() {
+            @Override
+            public void onResponse(Object result) {
+                ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+                News n = mapper.convertValue(result,News.class);
+                newsList.clear();
+                newsList.addAll(n.getNewsItem());
+                adapter.notifyDataSetChanged();
+                Log.d("vvk","success");
+            }
+        }, new com.vivek.sampleapp.interfaces.Response.ErrorListener() {
+            @Override
+            public void onError() {
+                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+                Log.d("vvk" ,"error");
+            }
+        }).execute();
+    }
 
+    @Override
+    public void onRefresh() {
+
+        swipeLayout.setRefreshing(true);
+        loadNews();
+        swipeLayout.setRefreshing(false);
+        Toast.makeText(getApplicationContext(),"refreshed",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void itemClicked(int position, String type) {
+        NewsItem item = newsList.get(position);
+        Intent i = new Intent(this,WebViewActivity.class);
+        i.putExtra("position",position);
+        startActivity(i);
+        adapter.visitedIds.add(item.getNewsItemId());
     }
 }

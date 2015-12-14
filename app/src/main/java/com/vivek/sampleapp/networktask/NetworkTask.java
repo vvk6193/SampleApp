@@ -1,10 +1,8 @@
 package com.vivek.sampleapp.networktask;
 
-import android.util.Log;
-
-import com.squareup.okhttp.internal.http.HttpMethod;
 import com.vivek.sampleapp.interfaces.Response;
-import com.vivek.sampleapp.resttemplate.RequestExecutor;
+
+import org.springframework.http.HttpMethod;
 
 /**
  * Created by v.vekariya on 12/10/2015.

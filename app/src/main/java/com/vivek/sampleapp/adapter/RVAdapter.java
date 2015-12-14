@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vivek.sampleapp.R;
+import com.vivek.sampleapp.interfaces.ClickListener;
 
 /**
  * Created by v.vekariya on 11/23/2015.
@@ -20,9 +21,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> implem
 
     ClickListener clickListener;
 
-    public interface ClickListener {
-        void itemClicked(int position, String type);
-    }
 
     public RVAdapter (Context ctx, ClickListener clickListener) {
         inflater = LayoutInflater.from(ctx);
@@ -78,7 +76,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> implem
         Log.d("vvk","bindview recycler view " + position);
                 holder.position = position;
                 holder.textView.setText("item number " + position);
-        holder.image.setImageDrawable(inflater.getContext().getResources().getDrawable(R.drawable.ic_doctor_default_blue,null));
+        holder.image.setImageResource(R.drawable.ic_doctor_default_blue);
     }
 
     @Override

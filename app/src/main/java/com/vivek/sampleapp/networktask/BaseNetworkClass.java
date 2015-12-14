@@ -1,11 +1,10 @@
 package com.vivek.sampleapp.networktask;
 
-import android.util.Log;
-
-import com.squareup.okhttp.internal.http.HttpMethod;
 import com.vivek.sampleapp.ExecutorFramework.MyExecutor;
 import com.vivek.sampleapp.interfaces.Response;
 import com.vivek.sampleapp.resttemplate.RequestExecutor;
+
+import org.springframework.http.HttpMethod;
 
 import java.util.concurrent.Future;
 
@@ -38,4 +37,8 @@ public abstract class BaseNetworkClass extends BaseTask {
 
     public abstract HttpMethod getMethodType();
 
+    @Override
+    public void runTask() {
+        runNetworkOperation();
+    }
 }

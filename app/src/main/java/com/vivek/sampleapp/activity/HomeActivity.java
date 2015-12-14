@@ -2,7 +2,6 @@ package com.vivek.sampleapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -53,6 +52,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         findViewById(R.id.buttonRVActivity).setOnClickListener(this);
         findViewById(R.id.buttonDrawerActivity).setOnClickListener(this);
         findViewById(R.id.buttontabLayoutActivity).setOnClickListener(this);
+        findViewById(R.id.buttonOpenGallary).setOnClickListener(this);
 
 
     }
@@ -76,6 +76,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.buttontabLayoutActivity:
                 i = new Intent(this, TabLayoutActivity.class);
+                break;
+            case R.id.buttonOpenGallary:
+                i = new Intent(this,GalleryActivity.class);
                 break;
         }
         startActivity(i);

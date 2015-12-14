@@ -3,7 +3,6 @@ package com.vivek.sampleapp.activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -14,11 +13,12 @@ import android.widget.Toast;
 import com.vivek.sampleapp.R;
 import com.vivek.sampleapp.adapter.MySimpleArrayAdapter;
 import com.vivek.sampleapp.adapter.RVAdapter;
+import com.vivek.sampleapp.interfaces.ClickListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RecyclerViewActivity extends BaseActivity implements RVAdapter.ClickListener {
+public class RecyclerViewActivity extends BaseActivity implements ClickListener {
 
     @Bind(R.id.my_recycler_view)
     RecyclerView rcview;
@@ -40,7 +40,7 @@ public class RecyclerViewActivity extends BaseActivity implements RVAdapter.Clic
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
-        RVAdapter adapter= new RVAdapter(this,(RVAdapter.ClickListener)this);
+        RVAdapter adapter= new RVAdapter(this,(ClickListener)this);
         StaggeredGridLayoutManager linearLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         rcview.setLayoutManager(linearLayoutManager);
         rcview.setAdapter(adapter);

@@ -70,6 +70,13 @@
         android:id="@+id/buttontabLayoutActivity"
         android:layout_below="@id/buttonRVActivity"
         android:layout_alignParentLeft="true"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="open gallary"
+        android:id="@+id/buttonOpenGallary"
+        android:layout_toRightOf="@id/buttontabLayoutActivity"
+        android:layout_alignBottom="@id/buttontabLayoutActivity"/>
 
     <ImageView
         android:layout_width="wrap_content"
