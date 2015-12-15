@@ -22,6 +22,7 @@ public class GalleryActivity extends BaseActivity implements ClickListener {
     public static File[] imageFiles;
     RecyclerView recyclerView;
     GalleryAdapter adapter;
+    boolean usePicasso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +43,17 @@ public class GalleryActivity extends BaseActivity implements ClickListener {
                         .setAction("Action", null).show();
             }
         });
+        usePicasso = getIntent().getBooleanExtra("usePicasso",false);
 
         String CameraFolder="Camera";
         File CameraDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString());
         File[] files = CameraDirectory.listFiles();
         for (File CurFile : files) {
             if (CurFile.isDirectory()) {
-                Log.d("vvk","dir "+CurFile.getName());
+                Log.d("vvk","dir "+CurFile.getName() + " usePicasso " +usePicasso);
                 imageFiles = CurFile.listFiles();
                 if(imageFiles!=null && imageFiles.length > 20) {
-                    adapter = new GalleryAdapter(getApplicationContext(),imageFiles,this);
+                    adapter = new GalleryAdapter(getApplicationContext(),imageFiles,this,usePicasso);
                     recyclerView.setAdapter(adapter);
                     break;
                 }
@@ -67,6 +69,7 @@ public class GalleryActivity extends BaseActivity implements ClickListener {
     public void itemClicked(int position, String type) {
         Intent i = new Intent(this,OpenImageActivity.class);
         i.putExtra("position",position);
+        i.putExtra("usePicasso",usePicasso);
         startActivity(i);
     }
 }

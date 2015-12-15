@@ -17,15 +17,17 @@ public class GalleryPagerAdapter extends FragmentPagerAdapter {
 
     File[] file;
     Context context;
-    public GalleryPagerAdapter(FragmentManager fm,Context context,File[] file) {
+    boolean usePicasso;
+    public GalleryPagerAdapter(FragmentManager fm,Context context,File[] file,boolean usePicasso) {
         super(fm);
         this.file = file;
         this.context = context;
+        this.usePicasso = usePicasso;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return new ImageFragment(file[position],context);
+        return new ImageFragment(file[position],context,usePicasso);
     }
 
     @Override

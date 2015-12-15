@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
 import com.vivek.sampleapp.R;
 import com.vivek.sampleapp.interfaces.ClickListener;
 import com.vivek.sampleapp.mypicaso.Vivek;
@@ -22,11 +23,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     LayoutInflater inflater;
     Context context;
     ClickListener clicklistener;
-    public GalleryAdapter(Context context,File[] files,ClickListener clickListener) {
+    boolean usePicasso;
+    public GalleryAdapter(Context context,File[] files,ClickListener clickListener, boolean usePicasso) {
         this.files = files;
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.clicklistener = clickListener;
+        this.usePicasso = usePicasso;
     }
 
     @Override
@@ -36,7 +39,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Vivek.with(context).load(files[position]).initial(R.drawable.ic_doctor_default_blue).into(holder.image);
+        if(usePicasso) {
+            Picasso.with(context).load(files[position]).placeholder(R.drawable.ic_doctor_default_blue).resize(200,200).centerCrop().into(holder.image);
+        } else {
+            Vivek.with(context).load(files[position]).initial(R.drawable.ic_doctor_default_blue).into(holder.image);
+        }
 
     }
 

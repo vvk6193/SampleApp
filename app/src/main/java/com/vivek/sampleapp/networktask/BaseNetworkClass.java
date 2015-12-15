@@ -29,7 +29,7 @@ public abstract class BaseNetworkClass extends BaseTask {
     }
 
     public Future<?> execute() {
-        WorkerClass<BaseNetworkClass> worker = new WorkerClass<BaseNetworkClass>(this);
+        WorkerClass<BaseNetworkClass> worker = new WorkerClass<BaseNetworkClass>(this,1);
         return MyExecutor.getInstance().submit(worker);
     }
 

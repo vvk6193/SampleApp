@@ -79,7 +79,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
             holder.headLine.setTextColor(Color.GRAY);
         }
         if(news.getImage() != null) {
-            Vivek.with(context).load(R.drawable.ic_doctor_default_blue).into(holder.image);
+            String thumb = news.getImage().getThumb();
+            try {
+                if(thumb != null && thumb.length() > 0) {
+                    Vivek.with(context).load(thumb).initial(R.drawable.ic_doctor_default_blue).into(holder.image);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Vivek.with(context).load(R.drawable.ic_doctor_default_blue).into(holder.image);
+            }
 //            Picasso.with(context).l
 //            Picasso.with(context).load(news.getImage().getThumb()).error(R.drawable.ic_doctor_default_blue).into(holder.image);
         } else {

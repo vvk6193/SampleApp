@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
 import com.vivek.sampleapp.R;
 import com.vivek.sampleapp.mypicaso.Vivek;
 
@@ -21,9 +22,11 @@ public class ImageFragment extends BaseFragment {
 
     File file;
     Context context;
-    public ImageFragment(File file,Context context) {
+    boolean usePicasso;
+    public ImageFragment(File file,Context context,boolean usePicasso) {
         this.file = file;
         this.context = context;
+        this.usePicasso = usePicasso;
     }
 
     ImageView image;
@@ -39,6 +42,10 @@ public class ImageFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Vivek.with(context).load(file).initial(R.drawable.ic_doctor_default_blue).keepInCache(false).into(image);
+        if(usePicasso) {
+            Picasso.with(context).load(file).placeholder(R.drawable.ic_doctor_default_blue).fit().into(image);
+        } else {
+            Vivek.with(context).load(file).initial(R.drawable.ic_doctor_default_blue).keepInCache(false).into(image);
+        }
     }
 }

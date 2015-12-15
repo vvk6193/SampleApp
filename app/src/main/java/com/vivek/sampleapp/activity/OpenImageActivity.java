@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.vivek.sampleapp.R;
@@ -14,6 +15,7 @@ import com.vivek.sampleapp.adapter.GalleryPagerAdapter;
 public class OpenImageActivity extends AppCompatActivity {
 
     ViewPager viewPager;
+    boolean usePicasso;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,9 +31,10 @@ public class OpenImageActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
+        usePicasso = getIntent().getBooleanExtra("usePicasso",false);
         int position = getIntent().getIntExtra("position", 0);
-        GalleryPagerAdapter pagerAdapter = new GalleryPagerAdapter(getSupportFragmentManager(), getApplicationContext(), GalleryActivity.imageFiles);
+        Log.d("vvk","OpenImageActivity position is " + position + " usePicasso is " + usePicasso);
+        GalleryPagerAdapter pagerAdapter = new GalleryPagerAdapter(getSupportFragmentManager(), getApplicationContext(), GalleryActivity.imageFiles,usePicasso);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(position);
 

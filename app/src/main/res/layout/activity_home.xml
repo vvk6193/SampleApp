@@ -73,16 +73,23 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="open gallary"
-        android:id="@+id/buttonOpenGallary"
+        android:text="open gallary picasso"
+        android:id="@+id/buttonOpenGallaryPicasso"
         android:layout_toRightOf="@id/buttontabLayoutActivity"
         android:layout_alignBottom="@id/buttontabLayoutActivity"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="open gallary vivek"
+        android:id="@+id/buttonOpenGallaryVivek"
+        android:layout_below="@id/buttontabLayoutActivity"
+        android:layout_alignParentLeft="true"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/mariimage"
-        android:layout_below="@id/buttontabLayoutActivity"
+        android:layout_below="@id/buttonOpenGallaryVivek"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
         android:clickable="true"

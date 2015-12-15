@@ -52,7 +52,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         findViewById(R.id.buttonRVActivity).setOnClickListener(this);
         findViewById(R.id.buttonDrawerActivity).setOnClickListener(this);
         findViewById(R.id.buttontabLayoutActivity).setOnClickListener(this);
-        findViewById(R.id.buttonOpenGallary).setOnClickListener(this);
+        findViewById(R.id.buttonOpenGallaryPicasso).setOnClickListener(this);
+        findViewById(R.id.buttonOpenGallaryVivek).setOnClickListener(this);
 
 
     }
@@ -77,8 +78,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
             case R.id.buttontabLayoutActivity:
                 i = new Intent(this, TabLayoutActivity.class);
                 break;
-            case R.id.buttonOpenGallary:
+            case R.id.buttonOpenGallaryPicasso:
                 i = new Intent(this,GalleryActivity.class);
+                i.putExtra("usePicasso",true);
+                break;
+            case R.id.buttonOpenGallaryVivek:
+                i = new Intent(this,GalleryActivity.class);
+                i.putExtra("usePicasso",false);
                 break;
         }
         startActivity(i);
