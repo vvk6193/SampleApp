@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.vivek.imageloader.ImageLoader;
 import com.vivek.sampleapp.R;
-import com.vivek.sampleapp.mypicaso.Vivek;
 
 import java.io.File;
 
@@ -45,7 +45,7 @@ public class ImageFragment extends BaseFragment {
         if(usePicasso) {
             Picasso.with(context).load(file).placeholder(R.drawable.ic_doctor_default_blue).fit().into(image);
         } else {
-            Vivek.with(context).load(file).initial(R.drawable.ic_doctor_default_blue).keepInCache(false).into(image);
+            ImageLoader.with(context).load(file).initial(R.drawable.ic_doctor_default_blue).keepInCache(false).into(image);
         }
     }
 }

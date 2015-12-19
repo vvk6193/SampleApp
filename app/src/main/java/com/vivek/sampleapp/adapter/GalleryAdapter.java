@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.vivek.imageloader.ImageLoader;
 import com.vivek.sampleapp.R;
 import com.vivek.sampleapp.interfaces.ClickListener;
-import com.vivek.sampleapp.mypicaso.Vivek;
 
 import java.io.File;
 
@@ -42,7 +42,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         if(usePicasso) {
             Picasso.with(context).load(files[position]).placeholder(R.drawable.ic_doctor_default_blue).resize(200,200).centerCrop().into(holder.image);
         } else {
-            Vivek.with(context).load(files[position]).initial(R.drawable.ic_doctor_default_blue).into(holder.image);
+            ImageLoader.with(context).load(files[position]).initial(R.drawable.ic_doctor_default_blue).into(holder.image);
         }
 
     }

@@ -3,7 +3,7 @@
 //import android.util.Log;
 //
 //import com.google.gson.Gson;
-//import com.vivek.sampleapp.ExecutorFramework.MyExecutor;
+//import MyExecutor;
 //import com.vivek.sampleapp.interfaces.Response;
 //
 //import java.lang.reflect.Method;

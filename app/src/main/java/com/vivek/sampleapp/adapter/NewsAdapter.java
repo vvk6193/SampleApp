@@ -10,10 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vivek.imageloader.ImageLoader;
 import com.vivek.sampleapp.R;
 import com.vivek.sampleapp.interfaces.ClickListener;
 import com.vivek.sampleapp.modal.NewsItem;
-import com.vivek.sampleapp.mypicaso.Vivek;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,16 +82,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
             String thumb = news.getImage().getThumb();
             try {
                 if(thumb != null && thumb.length() > 0) {
-                    Vivek.with(context).load(thumb).initial(R.drawable.ic_doctor_default_blue).into(holder.image);
+                    ImageLoader.with(context).load(thumb).initial(R.drawable.ic_doctor_default_blue).into(holder.image);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Vivek.with(context).load(R.drawable.ic_doctor_default_blue).into(holder.image);
+                ImageLoader.with(context).load(R.drawable.ic_doctor_default_blue).into(holder.image);
             }
 //            Picasso.with(context).l
 //            Picasso.with(context).load(news.getImage().getThumb()).error(R.drawable.ic_doctor_default_blue).into(holder.image);
         } else {
-            Vivek.with(context).load(R.drawable.ic_doctor_default_blue).into(holder.image);
+            ImageLoader.with(context).load(R.drawable.ic_doctor_default_blue).into(holder.image);
 //            Picasso.with(context).load(R.drawable.ic_doctor_default_blue).into(holder.image);
         }
     }

@@ -53,6 +53,10 @@
         <activity
             android:name=".activity.OpenImageActivity"
             android:label="@string/title_activity_open_image"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.StartGalleryActivity"
+            android:label="@string/title_activity_start_gallery"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

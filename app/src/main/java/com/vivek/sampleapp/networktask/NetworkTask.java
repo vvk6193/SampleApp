@@ -1,5 +1,6 @@
 package com.vivek.sampleapp.networktask;
 
+import com.vivek.sampleapp.basetask.BaseNetworkTaskRestTemplate;
 import com.vivek.sampleapp.interfaces.Response;
 
 import org.springframework.http.HttpMethod;
@@ -7,7 +8,7 @@ import org.springframework.http.HttpMethod;
 /**
  * Created by v.vekariya on 12/10/2015.
  */
-public class NetworkTask extends BaseNetworkClass{
+public class NetworkTask extends BaseNetworkTaskRestTemplate {
 
     public NetworkTask(Response.SuccessListener successListener, Response.ErrorListener errorListener) {
         super(successListener, errorListener);

@@ -16,4 +16,5 @@
     <string name="title_activity_web_view">News</string>
     <string name="title_activity_gallery">GalleryActivity</string>
     <string name="title_activity_open_image">OpenImageActivity</string>
+    <string name="title_activity_start_gallery">Gallery</string>
 </resources>
